@@ -11,38 +11,38 @@ TITLE String Primitives and Macros     (Proj6_JOHNSZA5.asm)
 INCLUDE Irvine32.inc
 
 ; constants
-SIGNED_MAX			  EQU		2147483647
-SIGNED_MIN			  EQU		-2147483648
-CHARACTER_LIMIT		EQU		12															; 11 characters + 1 for null
-INPUT_CAP			    EQU		10															; limit as per assignment 
+SIGNED_MAX			EQU		2147483647
+SIGNED_MIN			EQU		-2147483648
+CHARACTER_LIMIT			EQU		12				; 11 characters + 1 for null
+INPUT_CAP			EQU		10				; limit as per assignment 
 
 .data
 
 ; variables
-header				  BYTE	"Project 6: Designing Low-Level I/O Procedures",0
-author				  BYTE	"By: Zachary Johnson",0
-line				    BYTE	"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",0
+header			BYTE	"Project 6: Designing Low-Level I/O Procedures",0
+author			BYTE	"By: Zachary Johnson",0
+line			BYTE	"~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~",0
 instruction1		BYTE	"Please enter 10 signed integers. Please keep them within the signed integer range",0
 instruction2		BYTE	"(-2147483648 through 2147483648). The integers will then be displayed in an array.",0
 instruction3		BYTE	"The sum and truncated average will also be displayed.",0
-usrStr				  BYTE	CHARACTER_LIMIT	DUP	(?)									; FOR STORING THE STRING FORMAT INPUT
-enterNum			  BYTE	"Enter your integer choice: ",0								; FOR STORING THE CONVERTED VALUES FROM userString
-signErr				  BYTE	"Error: You did not enter a signed integer!",0
-retry				    BYTE	"Retry! Enter your choice integer choice: ",0
-sign				    BYTE	0	                                                ; SET 0 AS POSITIVE, -1 AS NEGATIVE
-intArray			  BYTE	"Your Signed Integers: ",0
-commaSpace			BYTE    ", ",0
-usrInputStr     BYTE    CHARACTER_LIMIT   DUP (?)
-sumStr				  BYTE    CHARACTER_LIMIT   DUP (?)
-avgStr				  BYTE    CHARACTER_LIMIT   DUP (?)
-sumHeader			  BYTE    "Sum of signed integers: ",0
-avgHeader			  BYTE    "Truncated average of signed integers: ",0
-bye1				    BYTE	"Wasn't that fun! Bye now! ",0
-usrInputLen			DWORD	?
-usrInput			  SDWORD	INPUT_CAP	DUP	(0)	
-edgeCase			  SDWORD	2147483648
-sum             SDWORD  0
-avg					    SDWORD  0
+usrStr			BYTE	CHARACTER_LIMIT	DUP	(?)									; FOR STORING THE STRING FORMAT INPUT
+enterNum		BYTE	"Enter your integer choice: ",0								; FOR STORING THE CONVERTED VALUES FROM userString
+signErr			BYTE	"Error: You did not enter a signed integer!",0
+retry			BYTE	"Retry! Enter your choice integer choice: ",0
+sign			BYTE	0	                                                ; SET 0 AS POSITIVE, -1 AS NEGATIVE
+intArray		BYTE	"Your Signed Integers: ",0
+commaSpace		BYTE    ", ",0
+usrInputStr     	BYTE    CHARACTER_LIMIT   DUP (?)
+sumStr			BYTE    CHARACTER_LIMIT   DUP (?)
+avgStr			BYTE    CHARACTER_LIMIT   DUP (?)
+sumHeader		BYTE    "Sum of signed integers: ",0
+avgHeader		BYTE    "Truncated average of signed integers: ",0
+bye1			BYTE	"Wasn't that fun! Bye now! ",0
+usrInputLen		DWORD	?
+usrInput		SDWORD	INPUT_CAP	DUP	(0)	
+edgeCase		SDWORD	2147483648
+sum             	SDWORD  0
+avg			SDWORD  0
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 mGetString	MACRO	instruction, usrStr, usrInputCount, usrLen
@@ -57,15 +57,15 @@ mGetString	MACRO	instruction, usrStr, usrInputCount, usrLen
 	push		EAX
 	push		ECX
 	push		EDX
-	mov			EDX,  instruction
+	mov		EDX,  instruction
 	call		WriteString
-	mov			EDX,	usrStr
-	mov			ECX,	usrInputCount
+	mov		EDX,	usrStr
+	mov		ECX,	usrInputCount
 	call		ReadString
-	mov			usrLen,  EAX										
-	pop			EDX
-	pop			ECX
-	pop			EAX
+	mov		usrLen,  EAX										
+	pop		EDX
+	pop		ECX
+	pop		EAX
 
 ENDM
 
@@ -80,9 +80,9 @@ mDisplayString	MACRO	displayStr
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	push		EDX
-	mov			EDX,  displayStr
+	mov		EDX,  displayStr
 	call		WriteString
-	pop			EDX
+	pop		EDX
 
 ENDM
 
@@ -98,13 +98,13 @@ mGetStringSimplified	MACRO  usrStr, usrCount, usrLen,
 	push		EAX
 	push		ECX
 	push		EDX
-	mov			EDX,	usrStr
-	mov			ECX,	usrCount
+	mov		EDX,	usrStr
+	mov		ECX,	usrCount
 	call		ReadString
-	mov			usrLen,  EAX										; num of char entered in terminal
-	pop			EDX
-	pop			ECX
-	pop			EAX
+	mov		usrLen,  EAX					; num of char entered in terminal
+	pop		EDX
+	pop		ECX
+	pop		EAX
 
 ENDM
 
@@ -118,11 +118,11 @@ main PROC
 	; Introduction PROC
 	push			OFFSET	header					;28
 	push			OFFSET	author					;24
-	push			OFFSET	line					  ;20
-	push			OFFSET	instruction1		;16
-	push			OFFSET	instruction2		;12
-	push			OFFSET	instruction3		;8
-	call			introduction					  ;4
+	push			OFFSET	line					;20
+	push			OFFSET	instruction1				;16
+	push			OFFSET	instruction2				;12
+	push			OFFSET	instruction3				;8
+	call			introduction					;4
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	
@@ -134,64 +134,64 @@ _getInt:
 	push			OFFSET	usrStr					;36
 	push			OFFSET	enterNum				;32
 	push			OFFSET	edgeCase				;28
-	push			OFFSET	usrInputLen			;24
-	push			EDX								      ;20
-	push			OFFSET	sign					  ;16
-	push			OFFSET	retry					  ;12
+	push			OFFSET	usrInputLen				;24
+	push			EDX						;20
+	push			OFFSET	sign					;16
+	push			OFFSET	retry					;12
 	push			OFFSET	signErr					;8
-	call			ReadVal							    ;4
-	add				EDX,	4						      ;12
-	loop			_getInt						    	;8
-	call			CrLf							      ;4
+	call			ReadVal						;4
+	add			EDX,	4					;12
+	loop			_getInt						;8
+	call			CrLf						;4
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	
 	; DisplayArray PROC
 	push			OFFSET	usrInputStr				;28
-	push			OFFSET	usrInput				  ;24
-	push			OFFSET	intArray				  ;20
+	push			OFFSET	usrInput				;24
+	push			OFFSET	intArray				;20
 	push			OFFSET	commaSpace				;16
-	push			OFFSET	sign					    ;12
-	push			OFFSET	line					    ;8
-	call			displayArray					    ;4
-	call			CrLf							        ;4
+	push			OFFSET	sign					;12
+	push			OFFSET	line					;8
+	call			displayArray					;4
+	call			CrLf						;4
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	
 	; Calculate PROC
 	push			OFFSET  usrInput				;16
-	push			OFFSET  avg						  ;12
-	push			OFFSET  sum						  ;8
-	call			Calculate						    ;4
+	push			OFFSET  avg					;12
+	push			OFFSET  sum					;8
+	call			Calculate					;4
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	
 	; WriteVal PROC			
-	mDisplayString	OFFSET	line					;4
+	mDisplayString		OFFSET	line					;4
 	call			Crlf							
-	mDisplayString	OFFSET	sumheader			;4
-	push			OFFSET	sign					      ;16
-	push			OFFSET	sumStr					    ;12
-	push			OFFSET	sum						      ;8
-	call			WriteVal						        ;4
-	mDisplayString	OFFSET	sumStr				;4
+	mDisplayString		OFFSET	sumheader				;4
+	push			OFFSET	sign					;16
+	push			OFFSET	sumStr					;12
+	push			OFFSET	sum					;8
+	call			WriteVal					;4
+	mDisplayString		OFFSET	sumStr					;4
 	call			CrLf							
 	call			Crlf							
-	mDisplayString	OFFSET	line					;4
+	mDisplayString		OFFSET	line					;4
 	call			Crlf							
-	mDisplayString	OFFSET	avgHeader				
-	push			OFFSET	sign					      ;16
-	push			OFFSET	avgStr					    ;12
-	push			OFFSET	avg						      ;8
-	call			WriteVal						        ;4
-	mDisplayString	OFFSET	avgStr				;4
+	mDisplayString		OFFSET	avgHeader				
+	push			OFFSET	sign					;16
+	push			OFFSET	avgStr					;12
+	push			OFFSET	avg					;8
+	call			WriteVal					;4
+	mDisplayString		OFFSET	avgStr					;4
 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	
 	; Goodbye PROC
 	push			OFFSET	line					    ;12
 	push			OFFSET	bye1					    ;8
-	call			goodbye							      ;4
+	call			goodbye						    ;4
 
 
 	Invoke		ExitProcess,0
@@ -210,35 +210,35 @@ Introduction PROC
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	push		EBP															
-	mov			EBP,	ESP
+	mov		EBP,	ESP
 
 	call		CrLf
-	mov			EDX,	[EBP+28]
+	mov		EDX,	[EBP+28]
 	call		WriteString
 	call		CrLf
-	mov			EDX,	[EBP+24]
+	mov		EDX,	[EBP+24]
 	call		WriteString
 	call		CrLf
-	mov			EDX,	[EBP+20]
+	mov		EDX,	[EBP+20]
 	call		WriteString
 	call		CrLf
 	call		CrLf
-	mov			EDX,	[EBP+16]
+	mov		EDX,	[EBP+16]
 	call		WriteString
 	call		CrLf
-	mov			EDX,	[EBP+12]
+	mov		EDX,	[EBP+12]
 	call		WriteString
 	call		CrLf
-	mov			EDX,	[EBP+8]
+	mov		EDX,	[EBP+8]
 	call		WriteString
 	call		CrLf
-	mov			EDX,	[EBP+20]
+	mov		EDX,	[EBP+20]
 	call		WriteString
 	call		CrLf
 	call		CrLf
 
-	pop			EBP
-	ret			20															
+	pop		EBP
+	ret		20															
 
 Introduction ENDP
 
@@ -254,96 +254,96 @@ ReadVal PROC
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	
 	push		EBP
-	mov			EBP,	ESP
+	mov		EBP,	ESP
 	pushad
 
-	mGetString	  [EBP+32], [EBP+36], CHARACTER_LIMIT, [EBP+24]		; calls the macro mGetString
-	mov			ESI,	[EBP+36]									                      ; holds the string from usrs input
-	mov			ECX,	[EBP+24]									                      ; holds len
-	mov			EDI,	[EBP+20]
-	mov			EBX,	10													
-	mov			EAX,	0													
-	mov			EDX,	0					                                       ;accumulator
+	mGetString	[EBP+32], [EBP+36], CHARACTER_LIMIT, [EBP+24]		; calls the macro mGetString
+	mov		ESI,	[EBP+36]					; holds the string from usrs input
+	mov		ECX,	[EBP+24]					; holds len
+	mov		EDI,	[EBP+20]
+	mov		EBX,	10													
+	mov		EAX,	0													
+	mov		EDX,	0					        ;accumulator
 
 
 _innerLoop:
 	lodsb
-	cmp			AL,  45					      ; checks for negative num
-	je			_negativeNum
-	cmp			AL,  48
-	jb			_invalid
-	cmp			AL,  57
-	ja			_invalid
-	jmp			_validInt
+	cmp		AL,  45					      ; checks for negative num
+	je		_negativeNum
+	cmp		AL,  48
+	jb		_invalid
+	cmp		AL,  57
+	ja		_invalid
+	jmp		_validInt
 
 _negativeNum:
-	mov			EAX,  1
-	mov			[EBP+16],  EAX                     ; 1 represnets neg num
-	jmp			_increment
+	mov		EAX,  1
+	mov		[EBP+16],  EAX                     ; 1 represnets neg num
+	jmp		_increment
 
 _validInt:
-	sub			AL,  48
+	sub		AL,  48
 	push		EAX															
-	mov			EAX,	[EDI]												
-	mul			EBX
-	mov			EDX,	EAX													
-	pop			EAX
-	add			EDX,	EAX
-	cmp			ECX,	1													
-	je			_edgeCase
+	mov		EAX,	[EDI]												
+	mul		EBX
+	mov		EDX,	EAX													
+	pop		EAX
+	add		EDX,	EAX
+	cmp		ECX,	1													
+	je		_edgeCase
 
 _addUp:
-	cmp			EDX,	SIGNED_MAX
-	ja			_invalid
-	cmp			EDX,	SIGNED_MIN
-	jl			_invalid
-	jmp			_increment
+	cmp		EDX,	SIGNED_MAX
+	ja		_invalid
+	cmp		EDX,	SIGNED_MIN
+	jl		_invalid
+	jmp		_increment
 
 _invalid:
-	mov			EDX,	[EBP+8]
+	mov		EDX,	[EBP+8]
 	call		WriteString
 	call		CrLf
-	mov			EDX,	[EBP+12]
+	mov		EDX,	[EBP+12]
 	call		WriteString
-	mov			EAX,	0
-	mov			[EDI],	EAX							                                ; clears invalid ints
-	mov			EDX,	0													
-	mGetStringSimplified	[EBP+36], CHARACTER_LIMIT, [EBP+24]				; calls macro with error string
+	mov		EAX,	0
+	mov		[EDI],	EAX						 ; clears invalid ints
+	mov		EDX,	0													
+	mGetStringSimplified	[EBP+36], CHARACTER_LIMIT, [EBP+24]		; calls macro with error string
 
-	mov			ESI,	[EBP+36]											                    ; holds input string
-	mov			ECX,	[EBP+24]											
-	jmp			_innerLoop
+	mov		ESI,	[EBP+36]					; holds input string
+	mov		ECX,	[EBP+24]											
+	jmp		_innerLoop
 
 _increment:
-	mov			[EDI],	EDX													                     ; saves the accumulated sum
+	mov		[EDI],	EDX						; saves the accumulated sum
 	loop		_innerLoop
-	mov			EAX,	1
-	cmp			[EBP+8],	EAX
-	je			_reset
-	jmp			_endLoop
+	mov		EAX,	1
+	cmp		[EBP+8],	EAX
+	je		_reset
+	jmp		_endLoop
 
-_edgeCase:									                                      ; (-2147483648)
-	mov			EAX,  1
-	cmp			[EBP+16],  EAX
-	jne			_addUp
-	cmp			EDX,	[EBP+28]  
-	ja			_invalid
-	jmp			_increment
+_edgeCase:							; (-2147483648)
+	mov		EAX,  1
+	cmp		[EBP+16],  EAX
+	jne		_addUp
+	cmp		EDX,	[EBP+28]  
+	ja		_invalid
+	jmp		_increment
 
 _reset:
 	pushad
-	mov			EAX,  [EDI]
-	mov			EBX,	-1
-	mul			EBX
-	mov			[EDI],	EAX
-	mov			EAX,  0
-	mov			[EBP+16],	EAX				                                      ; resets sign
+	mov		EAX,  [EDI]
+	mov		EBX,	-1
+	mul		EBX
+	mov		[EDI],	EAX
+	mov		EAX,  0
+	mov		[EBP+16],	EAX		  ; resets sign
 	popad
 
 _endLoop:
 	popad
-	pop			EBP
-	ret			36
+	pop		EBP
+	ret		36
 
 ReadVal ENDP
 
@@ -358,60 +358,60 @@ WriteVal PROC
 ; Returns: an array with all ten inputs printed in termial 
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-  push     EBP
-  mov      EBP,    ESP
+  	push     	EBP
+  	mov      	EBP,    ESP
 	pushad
 
-	mov			EAX,	[EBP+8]
-	mov			EAX,	[EAX]
-	mov			EDI,	[EBP+12]
-	mov			EBX,	0													
-	mov			ECX,	1													
-	cmp			EAX,	0													; check sign
-	jl			_neg
-	jmp			_asciiConversion
+	mov		EAX,	[EBP+8]
+	mov		EAX,	[EAX]
+	mov		EDI,	[EBP+12]
+	mov		EBX,	0													
+	mov		ECX,	1													
+	cmp		EAX,	0						; check sign
+	jl		_neg
+	jmp		_asciiConversion
 
 _neg:
-	neg			EAX															
-	mov			EBX,	1
+	neg		EAX															
+	mov		EBX,	1
 	
 _asciiConversion:
 	push		EBX
-	mov			EBX,	10
+	mov		EBX,	10
 	cdq
-	idiv		EBX															; quotient in eax, remainder in edx
-	pop			EBX
+	idiv		EBX				; quotient in eax, remainder in edx
+	pop		EBX
 
-	cmp			EAX,	0
-	je			_previousDigit													
-	add			EDX,	48													; more division
+	cmp		EAX,	0
+	je		_previousDigit													
+	add		EDX,	48				; more division
 	push		EDX
-	add			ECX,	1
-	jmp			_asciiConversion												
+	add		ECX,	1
+	jmp		_asciiConversion												
 
 _previousDigit:
-	add			EDX,	48
+	add		EDX,	48
 	push		EDX														
 
-	cmp			EBX,	1
-	je			_makeNeg										
-	jmp			_pop
+	cmp		EBX,	1
+	je		_makeNeg										
+	jmp		_pop
 
 _makeNeg:
-	push		45															;adds negative sign back to negative nums
-	add			ECX,	1
+	push		45			;adds negative sign back to negative nums
+	add		ECX,	1
 
 _pop:
-	pop			EAX
+	pop		EAX
 	stosb																	
 	loop		_pop
-	mov			AL,		0
+	mov		AL,		0
 	stosb
-	mov			EDI,	[EDI]
+	mov		EDI,	[EDI]
 
 	popad
-  pop     EBP
-  ret     12
+ 	pop     	EBP
+  	ret     	12
 
 WriteVal ENDP
 
@@ -427,27 +427,27 @@ Calculate PROC
 
     push        EBP
     mov         EBP,    ESP
-	  pushad
+    pushad
 
     mov         ESI,    [EBP+16]                                            
     mov         ECX,    INPUT_CAP               ; global variable for the hard cap of 10 inputs from usr
-	  mov			    EAX,	0
-	  mov			    EBX,	0
+    mov		EAX,	0
+    mov		EBX,	0
 
-_calculate:												;calculate sum
+_calculate:						;calculate sum
     mov         EBX,    [ESI]                           ; moves from usrInput
     add         EAX,    EBX
     add         ESI,    4								
     loop        _calculate
-    mov			    EDX,	[EBP+8]
-	  mov         [EDX],	EAX								
-	  cdq													;calculates avg
-    mov			    EBX,	INPUT_CAP
-	  idiv		    EBX
-	  mov			    EDX,	[EBP+12]
+    mov		EDX,	[EBP+8]
+    mov         [EDX],	EAX								
+    cdq							;calculates avg
+    mov		EBX,	INPUT_CAP
+    idiv	EBX
+    mov		EDX,	[EBP+12]
     mov        [EDX],   EAX
-
-	popad
+    
+    popad
     pop         EBP
     ret         8
 
@@ -463,14 +463,14 @@ displayArray PROC
 ; Returns: prints values in the terminal
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 	push		EBP
-	mov			EBP,	ESP
+	mov		EBP,	ESP
 	pushad
 
-	mov			EDX, [EBP+8]
+	mov		EDX, [EBP+8]
 	call		WriteString
 	call		CrLf
-	mov			ECX,	INPUT_CAP
-	mov			EDX,	[EBP+24]
+	mov		ECX,	INPUT_CAP
+	mov		EDX,	[EBP+24]
 	mDisplayString	[EBP+20]
 
 _output1:
@@ -479,18 +479,18 @@ _output1:
 	push		EDX
 	call		WriteVal
 	mDisplayString	[EBP+28]
-	cmp			ECX,	1
-	je			_output2								; the last item in the array is not appended with a comma
+	cmp		ECX,	1
+	je		_output2		; the last item in the array is not appended with a comma
 	mDisplayString	[EBP+16]
 
 _output2:
-	add			EDX,	4
+	add		EDX,	4
 	loop		_output1
 	call		CrLf
 
 	popad
-	pop			EBP
-	ret			20
+	pop		EBP
+	ret		20
 
 displayArray ENDP
 
@@ -506,7 +506,7 @@ goodbye PROC
 ;~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 	push		EBP
-	mov			EBP,	ESP
+	mov		EBP,	ESP
 	call		CrLf
 	call		CrLf
 	mDisplayString	[EBP+12]
@@ -514,8 +514,8 @@ goodbye PROC
 	mDisplayString	[EBP+8]
 	call		CrLf
 	call		CrLf
-	pop			EBP
-	ret			4
+	pop		EBP
+	ret		4
 
 goodbye ENDP
 
